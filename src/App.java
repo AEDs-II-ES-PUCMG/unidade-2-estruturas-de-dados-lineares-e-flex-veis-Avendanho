@@ -228,19 +228,28 @@ public class App {
         Pedido pedido = null;
         
         int opcao = -1;
+        int[] matricula = {8,8,2,1,0,6};
+        Pilha<Integer> pilha = new Pilha<>();
+        for(int i = matricula.length-1;   i >= 0; i--) {
+            pilha.empilhar(matricula[i]);
+        }
+
+                System.out.println(pilha.toString());
+                pilha.empilhar(3);
+                System.out.println(pilha.toString());
       
-        do{
-            opcao = menu();
-            switch (opcao) {
-                case 1 -> listarTodosOsProdutos();
-                case 2 -> mostrarProduto(localizarProduto());
-                case 3 -> mostrarProduto(localizarProdutoDescricao());
-                case 4 -> pedido = iniciarPedido();
-                case 5 -> finalizarPedido(pedido);
-                case 6 -> listarProdutosPedidosRecentes();
-            }
-            pausa();
-        }while(opcao != 0);       
+        // do{
+        //     opcao = menu();
+        //     switch (opcao) {
+        //         case 1 -> listarTodosOsProdutos();
+        //         case 2 -> mostrarProduto(localizarProduto());
+        //         case 3 -> mostrarProduto(localizarProdutoDescricao());
+        //         case 4 -> pedido = iniciarPedido();
+        //         case 5 -> finalizarPedido(pedido);
+        //         case 6 -> listarProdutosPedidosRecentes();
+        //     }
+        //     pausa();
+        // }while(opcao != 0);       
 
         teclado.close();    
     }

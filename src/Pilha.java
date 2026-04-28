@@ -53,8 +53,22 @@ public class Pilha<E> {
 	 * @throws IllegalArgumentException se a pilha não contém numItens elementos.
 	 */
 	public Pilha<E> subPilha(int numItens) {
-		
-		// TODO
+		Pilha<Integer> pilha = new Pilha<>();
+		for (int i = 0; i < numItens; i++) {
+			pilha.empilhar();
+		}
 		return null;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder texto = new StringBuilder();
+	Celula<E> topoTemp = topo;
+		while (topoTemp != fundo) {
+			System.out.println(topoTemp.getItem());
+			topoTemp = topoTemp.getProximo();
+
+		}
+		return texto.toString();
 	}
 }
