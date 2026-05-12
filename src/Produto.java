@@ -30,6 +30,10 @@ public abstract class Produto implements Comparable<Produto>{
 			throw new IllegalArgumentException("Valores inválidos para os dados do produto.");
 		}
 	}
+
+     public String getDescricao() {
+          return descricao;
+     }
 	
 	/**
      * Construtor completo. Os valores default, em caso de erro, são:

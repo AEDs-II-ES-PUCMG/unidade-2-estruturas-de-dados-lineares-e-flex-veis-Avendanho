@@ -16,7 +16,7 @@ public class Pedido implements Comparable<Pedido> {
 	private int idPedido;
 
 	/** Vetor para armazenar os itens do pedido */
-	private ItemDePedido[] itensDePedido;
+	private Lista<ItemDePedido> itensDePedido;
 
 	/** Data de criação do pedido */
 	private LocalDate dataPedido;
@@ -34,7 +34,7 @@ public class Pedido implements Comparable<Pedido> {
 	public Pedido(LocalDate dataPedido, int formaDePagamento) {
 
 		idPedido = ultimoID++;
-		itensDePedido = new ItemDePedido[MAX_ITENS_DE_PEDIDO];
+		itensDePedido = new Lista<>();
 		quantItensDePedido = 0;
 		this.dataPedido = dataPedido;
 		this.formaDePagamento = formaDePagamento;
@@ -42,20 +42,22 @@ public class Pedido implements Comparable<Pedido> {
 
 	// TODO: Tarefa 4 - Substituir o vetor itensDePedido por uma Lista<ItemDePedido>
 	//       e adaptar o construtor para inicializá-la.
-	public ItemDePedido[] getItensDoPedido() {
+	public Lista<ItemDePedido> getItensDoPedido() {
 		return itensDePedido;
 	}
 
-	public ItemDePedido existeNoPedido(Produto produto) {
-
-		// TODO: Tarefa 4 - Substituir o laço abaixo pelo método buscarPor da Lista<E>.
-		ItemDePedido itemDePedidoProcurado = new ItemDePedido(produto, 0, 0.1);
-		for (int i = 0; i < quantItensDePedido; i++) {
-			if (itensDePedido[i].equals(itemDePedidoProcurado)) {
-				return itensDePedido[i];
-			}
+	public boolean contemProdutoComDescricao(String descricao) {
+		for(ItemDePedido antedeguemon : itensDePedido) {
+			if(antedeguemon.getProduto().getDescricao().toLowerCase().contains(descricao.toLowerCase()))
+				return true;
 		}
-		return null;
+
+		return false;
+	}
+
+	public ItemDePedido existeNoPedido(Produto produto) {
+		ItemDePedido item = new ItemDePedido(produto, 1, DESCONTO_PG_A_VISTA);
+		return itensDePedido.buscarPor((i1, i2) -> { return i1.getProduto().equals(i2.getProduto()) ? 0 : -1; }, item);
 	}
 
 	/**
@@ -72,7 +74,10 @@ public class Pedido implements Comparable<Pedido> {
 			itemDePedido.setQuantidade(quantidade + itemDePedido.getQuantidade());
 			return true;
 		} else if (quantItensDePedido < MAX_ITENS_DE_PEDIDO) {
-			itensDePedido[quantItensDePedido++] = new ItemDePedido(novo, quantidade, novo.valorDeVenda());
+			itensDePedido.inserir(
+				new ItemDePedido(novo, quantidade, novo.valorDeVenda()), 
+				quantItensDePedido++
+			);
 			return true;
 		}
 		return false;
@@ -89,7 +94,7 @@ public class Pedido implements Comparable<Pedido> {
 		BigDecimal valorPedidoBD;
 
 		for (int i = 0; i < quantItensDePedido; i++) {
-			valorPedido += itensDePedido[i].getQuantidade() * itensDePedido[i].getPrecoVenda();
+			valorPedido += itensDePedido.pegar(i).getQuantidade() * itensDePedido.pegar(i).getPrecoVenda();
 		}
 
 		if (formaDePagamento == 1) {
@@ -117,7 +122,7 @@ public class Pedido implements Comparable<Pedido> {
 		stringPedido.append("Pedido com " + quantItensDePedido + " itens.\n");
 		stringPedido.append("Itens de pedido no pedido:\n");
 		for (int i = 0; i < quantItensDePedido; i++) {
-			stringPedido.append(itensDePedido[i].toString() + "\n");
+			stringPedido.append(itensDePedido.pegar(i).toString() + "\n");
 		}
 
 		stringPedido.append("Pedido pago ");

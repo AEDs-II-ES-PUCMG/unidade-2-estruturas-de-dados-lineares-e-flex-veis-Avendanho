@@ -22,6 +22,8 @@ public class App {
     // TODO: Tarefa 5 - Substituir a pilha abaixo por uma Lista<Pedido> para armazenar os pedidos.
     static Pilha<Pedido> pilhaPedidos = new Pilha<>();
 
+    static Lista<Pedido> pedidos = new Lista<>();
+
     static void limparTela() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -192,8 +194,7 @@ public class App {
      * Finaliza um pedido, armazenando-o na lista de pedidos.
      */
     public static void finalizarPedido(Pedido pedido) {
-    	// TODO: Tarefa 5 - Verificar se o pedido é válido e armazená-lo na lista de pedidos.
-    	//       Exibir o pedido finalizado na tela.
+    	pedidos.inserirFinal(pedido);
     }
 
     /**
@@ -201,10 +202,29 @@ public class App {
      * cuja descrição foi informada pelo usuário.
      */
     public static void filtrarPorProduto() {
-    	// TODO: Tarefa 5 - Ler a descrição do produto informada pelo usuário.
-    	//       Utilizar obrigatoriamente o método filtrar (Lista<E>) para selecionar os pedidos
-    	//       e o método buscarPor (Lista<E>) para verificar se um pedido contém o produto buscado.
-    	//       Exibir os pedidos encontrados ou uma mensagem caso nenhum seja localizado.
+        String descricao = lerString("Insira a descrição: ");
+
+        try {
+    	Lista<Pedido> resultado = pedidos.filtrar((pedido) -> pedido.contemProdutoComDescricao(descricao));
+        imprimirLista("Pedidos filtrados: ", resultado);
+        } catch(IllegalStateException e) {
+            System.out.println("Fechar o pedido, boçal");
+        }
+    }
+
+    private static String lerString(String mensagem) {
+        System.out.print(mensagem);
+        return teclado.nextLine();
+    }
+
+    private static <E> void imprimirLista(String titulo, Lista<E> lista) {
+        StringBuilder builder = new StringBuilder(titulo + "\n");
+
+        for(int i = 0; i < lista.tamanho(); i++) {
+            builder.append(lista.pegar(i).toString() + "\n");
+        }
+
+        System.out.println(builder.toString());
     }
 
 	public static void main(String[] args) {
