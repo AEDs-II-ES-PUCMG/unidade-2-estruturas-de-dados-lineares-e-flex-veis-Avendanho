@@ -40,6 +40,20 @@ public class Pilha<E> {
 
 	}
 
+	public String listarElementos() {
+		StringBuilder builder = new StringBuilder();
+
+		Celula<E> atual = topo;
+		int i = 0;
+		while(atual != fundo) {
+			builder.append((i + 1) + ". " + atual.getItem() + "\n");
+			atual = atual.getProximo();
+			i++;
+		}
+
+		return builder.toString();
+	}
+
 	/**
 	 * Cria e devolve uma nova pilha contendo os primeiros numItens elementos
 	 * do topo da pilha atual.
@@ -53,24 +67,20 @@ public class Pilha<E> {
 	 * @throws IllegalArgumentException se a pilha não contém numItens elementos.
 	 */
 	public Pilha<E> subPilha(int numItens) {
-		Pilha<E> pilha = new Pilha<>();
-		Celula<E> topoTemp = topo;
-		for (int i = 0; i < numItens; i++) {
-			pilha.empilhar(topoTemp.getItem());
-			topoTemp = topoTemp.getProximo();
+		Pilha<E> pilhaAuxiliar = new Pilha<>();
+		Pilha<E> subPilha = new Pilha<>();
+		Celula<E> atual = topo;
+		int i = 0;
+		while(atual != fundo && i < numItens) {
+			pilhaAuxiliar.empilhar(atual.getItem());
+			atual = atual.getProximo();
+			i++;
 		}
-		return pilha;
-	}
 
-	@Override
-	public String toString() {
-		StringBuilder texto = new StringBuilder();
-	Celula<E> topoTemp = topo;
-		while (topoTemp != fundo) {
-			System.out.println(topoTemp.getItem());
-			topoTemp = topoTemp.getProximo();
-
+		while(!pilhaAuxiliar.vazia()) {
+			subPilha.empilhar(pilhaAuxiliar.desempilhar());
 		}
-		return texto.toString();
+
+		return subPilha;
 	}
 }
